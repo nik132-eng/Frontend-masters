@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #content {
+            margin-top: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            display: none;
+        }
+
+        @media only screen and (max-width: 600px) {
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+    <script>
+        let previousContent = '';
+        let backButton = null;
+
+        const projects = [
+            {
+                id: 'Chess-Diagonals',
+                url: 'https://nik132-eng.github.io/Chess-Diagonals/',
+                label: 'Chess Diagonals'
+            },
+            {
+                id: 'Knights-Dialer',
+                url: 'https://nik132-eng.github.io/knights-dialer/',
+                label: 'Knights Dialer'
+            },
+            {
+                id: 'Wordy-Unscrambler',
+                url: 'https://nik132-eng.github.io/wordy-unscrambler/',
+                label: 'Wordy Unscrambler'
+            },
+            {
+                id: 'Periodic-Table-Speller',
+                url: 'https://nik132-eng.github.io/periodic-table-speller/',
+                label: 'Periodic Table Speller'
+            }
+            // Add more projects here
+        ];
+
+        function showContent(contentId, button) {
+            let content = document.getElementById('content');
+            let newContent = '';
+
+            if (backButton) {
+                backButton.style.display = 'block';
+                backButton = null;
+            }
+
+            if (button.classList.contains('back-button')) {
+                content.innerHTML = previousContent;
+                let buttons = document.querySelectorAll('.button-container button');
+                buttons.forEach(btn => btn.style.display = 'block');
+            } else {
+                let buttons = document.querySelectorAll('.button-container button');
+                buttons.forEach(btn => {
+                    if (btn !== button) {
+                        btn.style.display = 'none';
+                    } else {
+                        btn.textContent = 'Back to Main Menu';
+                        btn.classList.add('back-button');
+                        backButton = btn;
+                    }
+                });
+
+                const selectedProject = projects.find(project => project.id === contentId);
+                if (selectedProject) {
+                    newContent = `<iframe src="${selectedProject.url}" width="100%" height="600"></iframe>`;
+                }
+
+                previousContent = content.innerHTML;
+                content.innerHTML = newContent;
+            }
+        }
+
+        function createButtons() {
+            const buttonContainer = document.querySelector('.button-container');
+            projects.forEach(project => {
+                const button = document.createElement('button');
+                button.textContent = project.label;
+                button.onclick = () => showContent(project.id, button);
+                buttonContainer.appendChild(button);
+            });
+        }
+
+        window.onload = createButtons;
+    </script>
+</head>
+<body>
+    <h1>Projects Demonstrating Strong Algorithmic Logic</h1>
+    <div class="button-container"></div>
+    <div id="content" style="margin-top: 100px;"></div>
+</body>
+</html>
